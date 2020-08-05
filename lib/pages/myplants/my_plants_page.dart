@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:plants_scheduler/pages/common/models/menu.dart';
 import 'package:plants_scheduler/pages/myplants/model/plant.dart';
-import 'package:plants_scheduler/utils/drawer.dart';
-import 'package:plants_scheduler/utils/leaf_clippers.dart';
+import 'package:plants_scheduler/resources/strings.dart';
+import 'package:plants_scheduler/widgets/drawer.dart';
+import 'package:plants_scheduler/widgets/hydration_state.dart';
+import 'package:plants_scheduler/widgets/leaf_clippers.dart';
 
 import 'mock.dart';
 
@@ -14,15 +16,12 @@ class MyPlantPage extends StatefulWidget {
 }
 
 class _MyPlantPageState extends State<MyPlantPage> {
-  final _selectedColor = Colors.deepOrange.shade900;
-  final _unselectedColor = Colors.grey.shade500;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "My Plants",
+        title: const Text(
+          MenuTitles.MY_PLANTS,
         ),
         actions: <Widget>[
           IconButton(
@@ -37,100 +36,11 @@ class _MyPlantPageState extends State<MyPlantPage> {
       body: _PlantsList(
         plants: getPlants(50),
       ),
-      drawer: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 7,
-            child: Container(
-              color: Colors.white,
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  PlantDrawerHeader(
-                    child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                "https://w7.pngwing.com/pngs/423/362/png-transparent-undertale-flowey-game-toriel-flower-fox-draw-game-food-pin.png"),
-                            radius: 40,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                              top: 8,
-                            ),
-                            child: Text(
-                              "Flowey the Flower",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    decoration: ShapeDecoration(
-                      color: Colors.green,
-                      shape: LeafBottomShapeBorder(),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.favorite,
-                      color: _selectedColor,
-                    ),
-                    title: Text(
-                      "My Plants",
-                      style: TextStyle(
-                        color: _selectedColor,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      MaterialCommunityIcons.book_open_page_variant,
-                      color: _unselectedColor,
-                    ),
-                    title: Text(
-                      "Catalogue",
-                      style: TextStyle(
-                        color: _unselectedColor,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.event,
-                      color: _unselectedColor,
-                    ),
-                    title: Text(
-                      "Schedule",
-                      style: TextStyle(
-                        color: _unselectedColor,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.exit_to_app,
-                      color: _unselectedColor,
-                    ),
-                    title: Text(
-                      "Logout",
-                      style: TextStyle(
-                        color: _unselectedColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      drawer: PlantsDrawer(
+          menu: Menu.appMenu(
+            selected: MenuTitles.MY_PLANTS,
           ),
-          Spacer(
-            flex: 3,
-          ),
-        ],
-      ),
+          user: getUser()),
     );
   }
 }
@@ -138,14 +48,14 @@ class _MyPlantPageState extends State<MyPlantPage> {
 class _PlantsList extends StatelessWidget {
   final List<Plant> _plants;
 
-  const _PlantsList({Key key, List<Plant> plants})
+  _PlantsList({Key key, List<Plant> plants})
       : _plants = plants,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        padding: EdgeInsets.all(
+        padding: const EdgeInsets.all(
           16.0,
         ),
         itemCount: _plants.length,
@@ -183,11 +93,11 @@ class _PlantItem extends StatelessWidget {
     }
   }
 
-  MainAxisAlignment _waterDropsAlignment() {
+  Alignment _waterDropsAlignment() {
     if (isLeft) {
-      return MainAxisAlignment.start;
+      return Alignment.centerLeft;
     } else {
-      return MainAxisAlignment.end;
+      return Alignment.centerRight;
     }
   }
 
@@ -196,59 +106,6 @@ class _PlantItem extends StatelessWidget {
       return CrossAxisAlignment.end;
     } else {
       return CrossAxisAlignment.start;
-    }
-  }
-
-  Widget _hydrationStatus() {
-    final filledIcon = Icon(
-      (MaterialCommunityIcons.water),
-      color: Colors.white,
-    );
-    final emptyIcon = Icon(
-      MaterialCommunityIcons.water_outline,
-      color: Colors.white,
-    );
-    switch (plant.hydrationState) {
-      case HydrationState.Dry:
-        return Row(
-          mainAxisAlignment: _waterDropsAlignment(),
-          children: <Widget>[
-            emptyIcon,
-            emptyIcon,
-            emptyIcon,
-          ],
-        );
-        break;
-      case HydrationState.Low:
-        return Row(
-          mainAxisAlignment: _waterDropsAlignment(),
-          children: <Widget>[
-            emptyIcon,
-            emptyIcon,
-            filledIcon,
-          ],
-        );
-        break;
-      case HydrationState.Medium:
-        return Row(
-          mainAxisAlignment: _waterDropsAlignment(),
-          children: <Widget>[
-            emptyIcon,
-            filledIcon,
-            filledIcon,
-          ],
-        );
-        break;
-      case HydrationState.High:
-        return Row(
-          mainAxisAlignment: _waterDropsAlignment(),
-          children: <Widget>[
-            filledIcon,
-            filledIcon,
-            filledIcon,
-          ],
-        );
-        break;
     }
   }
 
@@ -272,7 +129,8 @@ class _PlantItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.symmetric(
+                alignment: _waterDropsAlignment(),
+                padding: const EdgeInsets.symmetric(
                   horizontal: 4.0,
                   vertical: 2.0,
                 ),
@@ -284,13 +142,16 @@ class _PlantItem extends StatelessWidget {
                       Colors.transparent,
                       Colors.grey.shade600.withAlpha(50)
                     ])),
-                child: _hydrationStatus(),
+                child: HydrationStatus(
+                  hydration: plant.hydrationState,
+                  color: Colors.white,
+                ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
                 ),
-                constraints: BoxConstraints.expand(
+                constraints: const BoxConstraints.expand(
                   height: 48.0,
                 ),
                 color: Colors.white,
