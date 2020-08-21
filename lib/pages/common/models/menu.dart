@@ -4,21 +4,19 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:plants_scheduler/resources/strings.dart';
 
 class Menu {
-  final List<MenuItem> items;
-  final String selected;
+  List<MenuItem> items;
+  String selected;
 
-  const Menu({this.items, this.selected});
+  Menu({this.items, this.selected});
 
-  factory Menu.appMenu({String selected = MenuTitles.MY_PLANTS,}) {
-    return Menu(
-      items: [
+  Menu.appMenu({String selected = MenuTitles.MY_PLANTS,}) {
+      this.items = [
         MenuItem.myPlants,
         MenuItem.catalogue,
         MenuItem.schedule,
         MenuItem.logout,
-      ],
-      selected: selected,
-    );
+      ];
+      this.selected= selected;
   }
 }
 

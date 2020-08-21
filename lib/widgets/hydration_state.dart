@@ -20,48 +20,15 @@ class HydrationStatus extends StatelessWidget {
       MaterialCommunityIcons.water_outline,
       color: color,
     );
-    switch (hydration) {
-      case HydrationState.Dry:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            emptyIcon,
-            emptyIcon,
-            emptyIcon,
-          ],
-        );
-        break;
-      case HydrationState.Low:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            emptyIcon,
-            emptyIcon,
-            filledIcon,
-          ],
-        );
-        break;
-      case HydrationState.Medium:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            emptyIcon,
-            filledIcon,
-            filledIcon,
-          ],
-        );
-        break;
-      case HydrationState.High:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            filledIcon,
-            filledIcon,
-            filledIcon,
-          ],
-        );
-        break;
+
+    final dryState = <Icon>[];
+    for (var i=3; i>0; i--){
+      hydration.index < i ? dryState.add(emptyIcon) : dryState.add(filledIcon);
     }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: dryState,
+    );
   }
 
 }

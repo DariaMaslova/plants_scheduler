@@ -94,19 +94,11 @@ class _PlantItem extends StatelessWidget {
   }
 
   Alignment _waterDropsAlignment() {
-    if (isLeft) {
-      return Alignment.centerLeft;
-    } else {
-      return Alignment.centerRight;
-    }
+    return isLeft ? Alignment.centerLeft : Alignment.centerRight;
   }
 
   CrossAxisAlignment _textAlignment() {
-    if (isLeft) {
-      return CrossAxisAlignment.end;
-    } else {
-      return CrossAxisAlignment.start;
-    }
+    return isLeft ? CrossAxisAlignment.end : CrossAxisAlignment.start;
   }
 
   @override
