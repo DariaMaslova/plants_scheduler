@@ -4,12 +4,15 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:plants_scheduler/pages/catalogue/catalogue_page.dart';
+import 'package:plants_scheduler/pages/common/models/filter.dart';
 import 'package:plants_scheduler/pages/common/models/menu.dart';
 import 'package:plants_scheduler/pages/myplants/my_plants_page.dart';
 import 'package:plants_scheduler/pages/stub/stub_page.dart';
 import 'package:plants_scheduler/resources/strings.dart';
 import 'package:plants_scheduler/routes.dart';
 import 'package:plants_scheduler/widgets/drawer.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import 'mock.dart';
 
@@ -26,6 +29,8 @@ class HomePageState extends State<HomePage> {
             .dependOnInheritedWidgetOfExactType<_HomePageStateProvider>())
         .state;
   }
+
+  FilterController _filterController = FilterController();
 
   final navKey = GlobalKey<NavigatorState>();
   MenuNavigator _menuNavigator;
@@ -59,6 +64,7 @@ class HomePageState extends State<HomePage> {
       backgroundColor: Colors.green,
       elevation: 0,
       title: TextField(
+        controller: _filterController.queryController,
         decoration: InputDecoration(
             hintText: HomeStrings.HINT_SEARCH,
             border: InputBorder.none,
@@ -127,6 +133,9 @@ class HomePageState extends State<HomePage> {
     switch (routeName) {
       case MenuRoutes.myPlants:
         page = MyPlantPage();
+        break;
+      case MenuRoutes.catalogue:
+        page = CataloguePage();
         break;
       default:
         String title = settings.arguments is String
@@ -241,5 +250,54 @@ class MenuNavigator {
     return PageRouteBuilder(
         settings: settings,
         pageBuilder: (context, animation, secondaryAnimation) => page);
+  }
+}
+
+class FilterController {
+  static FilterController of(BuildContext context) {
+    return (context
+            .dependOnInheritedWidgetOfExactType<_HomePageStateProvider>())
+        .state
+        ._filterController;
+  }
+
+  FilterParams _filterParams;
+
+  StreamController<FilterParams> _streamController;
+
+  final TextEditingController queryController = TextEditingController();
+
+  FilterController() {
+    init();
+  }
+
+  init() {
+    _setFilterParams(FilterParams.initial());
+    queryController.addListener(() {
+      _setFilterParams(_filterParams.withQuery(queryController.text));
+    });
+  }
+
+  subscribe(Function(FilterParams) listener) {
+    unsubscribe();
+    _streamController = StreamController();
+    _streamController.stream
+        .debounce(Duration(milliseconds: 500))
+        .listen(listener);
+    _streamController.add(_filterParams);
+  }
+
+  unsubscribe() {
+    _streamController?.close();
+    _streamController = null;
+  }
+
+  _setFilterParams(FilterParams params) {
+    _filterParams = params;
+    _streamController?.add(params);
+  }
+
+  close() {
+    unsubscribe();
   }
 }
