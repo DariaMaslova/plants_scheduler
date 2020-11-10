@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:plants_scheduler/pages/common/models/menu.dart';
+import 'package:plants_scheduler/main.dart';
 import 'package:plants_scheduler/pages/myplants/model/plant.dart';
-import 'package:plants_scheduler/resources/strings.dart';
-import 'package:plants_scheduler/widgets/drawer.dart';
+import 'package:plants_scheduler/routes.dart';
 import 'package:plants_scheduler/widgets/hydration_state.dart';
-import 'package:plants_scheduler/widgets/leaf_clippers.dart';
 
 import 'mock.dart';
 
@@ -19,28 +16,9 @@ class _MyPlantPageState extends State<MyPlantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          MenuTitles.MY_PLANTS,
-        ),
-        actions: <Widget>[
-          IconButton(
-            splashColor: Colors.yellow,
-            icon: Icon(
-              Icons.filter_list,
-            ),
-            onPressed: () {},
-          )
-        ],
-      ),
       body: _PlantsList(
         plants: getPlants(50),
       ),
-      drawer: PlantsDrawer(
-          menu: Menu.appMenu(
-            selected: MenuTitles.MY_PLANTS,
-          ),
-          user: getUser()),
     );
   }
 }
@@ -103,74 +81,79 @@ class _PlantItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4.0,
-      shape: RoundedRectangleBorder(borderRadius: _borderRadius()),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          Container(
-            constraints: BoxConstraints.expand(),
-            child: Image.network(
-              plant.preview,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () => {
+        AppNavigator.of(context).pushNamed(AppRoutes.plantDetails, arguments: plant)
+      },
+      child: Card(
+        elevation: 4.0,
+        shape: RoundedRectangleBorder(borderRadius: _borderRadius()),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: <Widget>[
+            Container(
+              constraints: BoxConstraints.expand(),
+              child: Image.network(
+                plant.preview,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                alignment: _waterDropsAlignment(),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 4.0,
-                  vertical: 2.0,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  alignment: _waterDropsAlignment(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4.0,
+                    vertical: 2.0,
+                  ),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                        Colors.transparent,
+                        Colors.grey.shade600.withAlpha(50)
+                      ])),
+                  child: HydrationStatus(
+                    hydration: plant.hydrationState,
+                    color: Colors.white,
+                  ),
                 ),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                      Colors.transparent,
-                      Colors.grey.shade600.withAlpha(50)
-                    ])),
-                child: HydrationStatus(
-                  hydration: plant.hydrationState,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                  ),
+                  constraints: const BoxConstraints.expand(
+                    height: 48.0,
+                  ),
                   color: Colors.white,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                ),
-                constraints: const BoxConstraints.expand(
-                  height: 48.0,
-                ),
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: _textAlignment(),
-                  children: <Widget>[
-                    Text(
-                      plant.name,
-                      style: TextStyle(
-                        color: Colors.grey.shade800,
-                        fontSize: 14.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: _textAlignment(),
+                    children: <Widget>[
+                      Text(
+                        plant.name,
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: 14.0,
+                        ),
                       ),
-                    ),
-                    Text(
-                      plant.getLastWaterString(),
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 10.0,
+                      Text(
+                        plant.getLastWaterString(),
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 10.0,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
