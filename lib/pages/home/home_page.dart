@@ -1,9 +1,10 @@
 // originally copied from https://github.com/MichaelGuldborg/FlutterNestedNavigation
-
 import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:plants_scheduler/main.dart';
 import 'package:plants_scheduler/pages/catalogue/catalogue_page.dart';
 import 'package:plants_scheduler/pages/common/models/filter.dart';
 import 'package:plants_scheduler/pages/common/models/menu.dart';
@@ -73,6 +74,23 @@ class HomePageState extends State<HomePage> {
             )),
         style: TextStyle(color: Colors.white),
       ),
+      actions: [
+        GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(MaterialCommunityIcons.filter),
+          ),
+          onTap: () async {
+            final newParams = await AppNavigator.of(context).pushNamed(
+              AppRoutes.filter,
+              arguments: _filterController._filterParams,
+            );
+            if (newParams is FilterParams) {
+              _filterController._setFilterParams(newParams);
+            }
+          },
+        )
+      ],
     );
   }
 

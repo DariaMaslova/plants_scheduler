@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:plants_scheduler/api/model/filter.dart';
 import 'package:plants_scheduler/api/species_service.dart';
 import 'package:plants_scheduler/pages/catalogue/model/catalogue.dart';
 import 'package:plants_scheduler/pages/catalogue/usecase/load_more.dart';
@@ -7,6 +8,7 @@ import 'package:plants_scheduler/pages/home/home_page.dart';
 
 class CatalogueDataState {
   final String query;
+  final List<FilterAttribute> filterAttributes;
   final List<CataloguePlant> plants;
   final String nextPage;
   final bool isLoading;
@@ -18,6 +20,7 @@ class CatalogueDataState {
     this.nextPage,
     this.isLoading,
     this.errorMessage,
+    this.filterAttributes = const [],
   });
 
   factory CatalogueDataState.initial() {
@@ -32,6 +35,7 @@ class CatalogueDataState {
     String nextPage,
     bool isLoading,
     String errorMessage,
+    List<FilterAttribute> filterAttributes,
   }) {
     return CatalogueDataState(
       query: query ?? this.query,
@@ -39,6 +43,7 @@ class CatalogueDataState {
       nextPage: nextPage ?? this.nextPage,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
+      filterAttributes: filterAttributes ?? this.filterAttributes,
     );
   }
 
@@ -103,12 +108,13 @@ class CatalogueViewModel {
   }
 
   Future<void> search(
-      String query) async {
+      String query, List<FilterAttribute> filterAttributes) async {
     _setState(_state._copy(
         isLoading: true,
         plants: [],
-        query: query,));
-    final result = await _searchSpecies.call(query);
+        query: query,
+        filterAttributes: filterAttributes));
+    final result = await _searchSpecies.call(query, filterAttributes);
     result
       ..onSuccess((page) => _setState(_state._setPage(page)))
       ..onError((code, message) => _setState(_state._setError(message)));
@@ -131,9 +137,12 @@ class CatalogueViewModel {
     _filterController?.unsubscribe();
     _filterController = filterController;
     _filterController.subscribe((filter) {
-      if (filter.query != _state.query )
+      final filterAttributes = filter.attributes.values.toList();
+      if (filter.query != _state.query ||
+          filterAttributes != _state.filterAttributes)
         search(
-          filter.query
+          filter.query,
+          filterAttributes,
         );
     });
   }

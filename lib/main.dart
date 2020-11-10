@@ -1,6 +1,7 @@
 // originally copied from https://github.com/MichaelGuldborg/FlutterNestedNavigation
 
 import 'package:flutter/material.dart';
+import 'package:plants_scheduler/pages/filter/filter_page.dart';
 import 'package:plants_scheduler/pages/home/home_page.dart';
 import 'package:plants_scheduler/pages/stub/stub_page.dart';
 import 'package:plants_scheduler/resources/strings.dart';
@@ -72,6 +73,12 @@ Route<dynamic> _generateRoute(RouteSettings settings) {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               HomePage());
+      break;
+    case AppRoutes.filter:
+      route = PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              FilterPage(filterParams: settings.arguments));
       break;
     default:
       String title = settings.arguments is String
