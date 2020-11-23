@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:plants_scheduler/api/model/filter.dart';
 import 'package:plants_scheduler/api/species_service.dart';
+import 'package:plants_scheduler/core/exceptions.dart';
 import 'package:plants_scheduler/pages/catalogue/model/catalogue.dart';
 import 'package:plants_scheduler/pages/catalogue/usecase/load_more.dart';
 import 'package:plants_scheduler/pages/catalogue/usecase/search.dart';
@@ -132,7 +133,7 @@ class CatalogueViewModel {
 
   subscribeFilter(FilterController filterController) {
     if (_state == null) {
-      return; // not initialized
+      throw IllegalStateException("State is not initialized"); // not initialized
     }
     _filterController?.unsubscribe();
     _filterController = filterController;

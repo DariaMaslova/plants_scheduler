@@ -82,9 +82,8 @@ class _PlantItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => {
-        AppNavigator.of(context).pushNamed(AppRoutes.plantDetails, arguments: plant)
-      },
+      onTap: () => AppNavigator.of(context)
+          .pushNamed(AppRoutes.plantDetails, arguments: plant),
       child: Card(
         elevation: 4.0,
         shape: RoundedRectangleBorder(borderRadius: _borderRadius()),

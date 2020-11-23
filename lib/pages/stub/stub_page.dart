@@ -15,9 +15,7 @@ class StubPage extends StatelessWidget {
     return Scaffold(
       appBar: hasActionBar ? AppBar(
         leading: GestureDetector(
-          onTap: () {
-            AppNavigator.of(context).pop();
-          },
+          onTap: () => AppNavigator.of(context).pop(),
           child: Icon(
             Icons.arrow_back,
             color: Colors.white,

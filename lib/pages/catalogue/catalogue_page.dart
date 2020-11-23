@@ -52,9 +52,7 @@ class _CatalogueState extends State<CataloguePage> {
                   child: _Catalogue(
                     plants: state.plants ??
                         List<CataloguePlant>(),
-                    onLoadMoreListener: () {
-                      _viewModel.loadMore();
-                    },
+                    onLoadMoreListener: _viewModel.loadMore,
                     canLoadMore: state.canLoadMore(),
                   ),
                 ),

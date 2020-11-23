@@ -31,12 +31,10 @@ class _FilterState extends State<FilterPage> {
   void initState() {
     _filterParams = widget.filterParams;
     final initialHeight = _getHeight();
-    final Function onHeightTextChanged = () {
-      _onHeightRangeChanged(
-        int.parse(_heightMinController.text, onError: (_) => 0),
-        int.parse(_heightMaxController.text, onError: (_) => 0),
-      );
-    };
+    final Function onHeightTextChanged = () => _onHeightRangeChanged(
+          int.parse(_heightMinController.text, onError: (_) => 0),
+          int.parse(_heightMaxController.text, onError: (_) => 0),
+        );
     _heightMinController =
         TextEditingController(text: initialHeight.first.toString())
           ..addListener(onHeightTextChanged);
@@ -79,17 +77,15 @@ class _FilterState extends State<FilterPage> {
   Pair<int, int> _getHeight() =>
       _getRangedAttribute(FilterAttributeKeys.FILTER_MAX_HEIGHT);
 
-  _onEdibleCheckedChanged(bool isChecked) {
-    setState(
-      () {
-        _filterParams = _filterParams.withAttribute(
-          FilterAttributeKeys.FILTER_EDIBLE,
-          BooleanFilterAttribute(FilterAttributeKeys.FILTER_EDIBLE,
-              value: isChecked),
-        );
-      },
-    );
-  }
+  _onEdibleCheckedChanged(bool isChecked) => setState(
+        () {
+          _filterParams = _filterParams.withAttribute(
+            FilterAttributeKeys.FILTER_EDIBLE,
+            BooleanFilterAttribute(FilterAttributeKeys.FILTER_EDIBLE,
+                value: isChecked),
+          );
+        },
+      );
 
   _onMonthSelectedChanged(String month, bool isSelected) {
     final selectedMonths = HashSet<String>.from(_getSelectedMonths());
@@ -109,20 +105,18 @@ class _FilterState extends State<FilterPage> {
     });
   }
 
-  _onRangedAttributeChanged(String key, int left, int right) {
-    setState(
-      () {
-        _filterParams = _filterParams.withAttribute(
-          key,
-          RangeFilterAttribute(
+  _onRangedAttributeChanged(String key, int left, int right) => setState(
+        () {
+          _filterParams = _filterParams.withAttribute(
             key,
-            minValue: left,
-            maxValue: right,
-          ),
-        );
-      },
-    );
-  }
+            RangeFilterAttribute(
+              key,
+              minValue: left,
+              maxValue: right,
+            ),
+          );
+        },
+      );
 
   _onLightRangeChanged(int left, int right) => _onRangedAttributeChanged(
         FilterAttributeKeys.FILTER_LIGHT,
@@ -142,8 +136,6 @@ class _FilterState extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final height = _getHeight();
-
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -184,9 +176,9 @@ class _FilterState extends State<FilterPage> {
           ),
           const _FilterTitle(FilterStrings.FILTER_MAX_HEIGHT),
           _HeightTile(
-              values: _getHeight(),
-              leftController: _heightMinController,
-              rightController: _heightMaxController
+            values: _getHeight(),
+            leftController: _heightMinController,
+            rightController: _heightMaxController,
           ),
           _EdibleTile(
             _getIsEdible(),
@@ -250,9 +242,7 @@ class _EdibleTile extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () {
-          onCheckedChanged?.call(!isEdible);
-        },
+        onTap: () => onCheckedChanged?.call(!isEdible),
       ),
     );
   }
@@ -282,9 +272,8 @@ class _MonthsTile extends StatelessWidget {
               month,
               style: TextStyle(color: isSelected ? Colors.white : Colors.black),
             ),
-            onSelected: (isSelected) {
-              onSelectedChanged?.call(_toShortName(month), isSelected);
-            },
+            onSelected: (isSelected) =>
+                onSelectedChanged?.call(_toShortName(month), isSelected),
             selected: isSelected,
             selectedColor: Theme.of(context).accentColor,
             checkmarkColor: Colors.white,

@@ -8,7 +8,7 @@ import 'package:plants_scheduler/resources/strings.dart';
 import 'package:plants_scheduler/routes.dart';
 
 void main() {
-  runApp( App());
+  runApp(App());
 }
 
 class _AppStateProvider extends InheritedWidget {
@@ -24,27 +24,25 @@ class _AppStateProvider extends InheritedWidget {
 /// the app level navigator from the app state
 class AppNavigator {
   static NavigatorState of(BuildContext context) {
-    return AppState.of(context).navKey.currentState;
+    return Navigator.of(
+      context,
+      rootNavigator: true,
+    );
   }
 }
 
 class App extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return  AppState();
+    return AppState();
   }
 }
 
-class  AppState extends State< App> {
+class AppState extends State<App> {
   static AppState of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<_AppStateProvider>())
         .state;
   }
-
-  /// The app state contains a key for the app level navigator in the
-  /// [MaterialApp] widget which can be used to push, pop and replace routes
-  final navKey = GlobalKey<NavigatorState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +50,6 @@ class  AppState extends State< App> {
       state: this,
       child: MaterialApp(
         title: 'Flutter Demo',
-        navigatorKey: navKey,
         theme: ThemeData(
           primarySwatch: Colors.green,
           accentColor: Colors.redAccent,
@@ -71,8 +68,7 @@ Route<dynamic> _generateRoute(RouteSettings settings) {
     case AppRoutes.home:
       route = PageRouteBuilder(
           settings: settings,
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              HomePage());
+          pageBuilder: (context, animation, secondaryAnimation) => HomePage());
       break;
     case AppRoutes.filter:
       route = PageRouteBuilder(
