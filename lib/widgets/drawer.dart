@@ -84,8 +84,10 @@ class PlantDrawerHeader extends StatelessWidget {
 class PlantsDrawer extends StatelessWidget {
   final Menu menu;
   final User user;
+  final Function(MenuItem) onOpen;
 
-  const PlantsDrawer({Key key, this.menu, this.user}) : super(key: key);
+  const PlantsDrawer({Key key, this.menu, this.user, this.onOpen})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +100,10 @@ class PlantsDrawer extends StatelessWidget {
               return _userHeader(user);
             } else {
               return _menuTile(
+                context,
                 menu.items[index - 1],
                 isSelected: menu.items[index - 1].title == menu.selected,
+                onOpen: onOpen,
               );
             }
           }),
@@ -107,7 +111,12 @@ class PlantsDrawer extends StatelessWidget {
   }
 }
 
-Widget _menuTile(MenuItem menuItem, {bool isSelected = false}) {
+Widget _menuTile(
+  BuildContext context,
+  MenuItem menuItem, {
+  bool isSelected = false,
+  Function(MenuItem) onOpen,
+}) {
   Color color;
   if (isSelected) {
     color = Colors.deepOrange.shade900;
@@ -125,6 +134,12 @@ Widget _menuTile(MenuItem menuItem, {bool isSelected = false}) {
         color: color,
       ),
     ),
+    onTap: () {
+      Navigator.of(context).pop();
+      if (onOpen!= null) {
+        onOpen.call(menuItem);
+      };
+    },
   );
 }
 

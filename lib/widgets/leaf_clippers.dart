@@ -90,6 +90,16 @@ class LeafBottomShapeBorder extends ShapeBorder {
   ShapeBorder scale(double t) {
     return this;
   }
+
+  @override
+  ShapeBorder lerpTo(ShapeBorder b, double t) {
+    return b;
+  }
+
+  @override
+  ShapeBorder lerpFrom(ShapeBorder a, double t) {
+    return this;
+  }
 }
 
 Path _createLeafTopPath(double left, double top, double right, double bottom,
