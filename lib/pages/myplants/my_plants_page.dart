@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:plants_scheduler/generated/l10n.dart';
 import 'package:plants_scheduler/main.dart';
 import 'package:plants_scheduler/pages/myplants/model/plant.dart';
 import 'package:plants_scheduler/routes.dart';
@@ -51,6 +53,7 @@ class _PlantsList extends StatelessWidget {
 }
 
 class _PlantItem extends StatelessWidget {
+  static final _dateFormat = DateFormat("d MMM");
   final Plant plant;
   final bool isLeft;
   final _cornerRadius = Radius.circular(24.0);
@@ -140,7 +143,8 @@ class _PlantItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        plant.getLastWaterString(),
+                        S.of(context).myPlantsLastWatered +
+                            _dateFormat.format(plant.lastWater),
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 10.0,

@@ -4,13 +4,13 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:plants_scheduler/generated/l10n.dart';
 import 'package:plants_scheduler/main.dart';
 import 'package:plants_scheduler/pages/catalogue/catalogue_page.dart';
 import 'package:plants_scheduler/pages/common/models/filter.dart';
 import 'package:plants_scheduler/pages/common/models/menu.dart';
 import 'package:plants_scheduler/pages/myplants/my_plants_page.dart';
 import 'package:plants_scheduler/pages/stub/stub_page.dart';
-import 'package:plants_scheduler/resources/strings.dart';
 import 'package:plants_scheduler/routes.dart';
 import 'package:plants_scheduler/widgets/drawer.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -43,20 +43,20 @@ class HomePageState extends State<HomePage> {
 
   get isSearchEnabled => currentRoute == MenuRoutes.catalogue;
 
-  get routeTitle => routeTitles[currentRoute] ?? MenuTitles.MY_PLANTS;
+  get routeId => routeIds[currentRoute] ?? MenuIds.MY_PLANTS;
 
-  final routeTitles = <String, String>{
-    MenuRoutes.myPlants: MenuTitles.MY_PLANTS,
-    MenuRoutes.schedule: MenuTitles.SCHEDULE,
-    MenuRoutes.catalogue: MenuTitles.CATALOGUE,
-    MenuRoutes.logout: MenuTitles.LOGOUT,
+  final routeIds = <String, String>{
+    MenuRoutes.myPlants: MenuIds.MY_PLANTS,
+    MenuRoutes.schedule: MenuIds.SCHEDULE,
+    MenuRoutes.catalogue: MenuIds.CATALOGUE,
+    MenuRoutes.logout: MenuIds.LOGOUT,
   };
 
-  Widget _createRegularAppBar() {
+  Widget _createRegularAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.green,
       elevation: 0,
-      title: Text(routeTitle),
+      title: Text(S.of(context).menuTitles(routeId)),
     );
   }
 
@@ -67,7 +67,7 @@ class HomePageState extends State<HomePage> {
       title: TextField(
         controller: _filterController.queryController,
         decoration: InputDecoration(
-            hintText: HomeStrings.HINT_SEARCH,
+            hintText: S.of(context).homeHintSearch,
             border: InputBorder.none,
             hintStyle: TextStyle(
               color: Colors.white60,
@@ -118,7 +118,7 @@ class HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           appBar: isSearchEnabled
               ? _createSearchingAppBar()
-              : _createRegularAppBar(),
+              : _createRegularAppBar(context),
           body: Navigator(
             key: navKey,
             initialRoute: MenuRoutes.myPlants,
@@ -126,14 +126,14 @@ class HomePageState extends State<HomePage> {
           ),
           drawer: PlantsDrawer(
             menu: Menu.appMenu(
-              selected: routeTitle,
+              selected: routeId,
             ),
             user: getUser(),
             onOpen: (item) {
               if (item.route != currentRoute) {
                 _menuNavigator.pushNamed(
                   item.route,
-                  arguments: item.title,
+                  arguments: item.id,
                 );
               }
             },
@@ -158,7 +158,7 @@ class HomePageState extends State<HomePage> {
       default:
         String title = settings.arguments is String
             ? settings.arguments
-            : StubStrings.UNKNOWN_PAGE;
+            : null;
         page = StubPage(
           title: title,
           hasActionBar: false,

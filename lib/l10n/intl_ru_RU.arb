@@ -1,0 +1,27 @@
+{
+  "@@locale": "ru_RU",
+
+  "trefleLocale": "ru",
+
+  "menuTitles": "{title, select, myPlants {Мои цветы} catalogue {Каталог} schedule {Расписание} logout {Выйти} other {Undefined}}",
+
+  "homeHintSearch": "Поиск...",
+
+  "stubUnknownPage": "Неизвестная страница",
+  "stubStubText": "К сожалению, данная функциональность ещё не реализована",
+
+  "filterTitle": "Фильтр",
+
+  "filterFilterEdible": "Съедобно",
+  "filterFilterMaxHeight": "Высота в см",
+  "filterFilterLight": "Уровень освещённости",
+  "filterFilterBloomMonth": "Месяцы цветения",
+
+  "filterValueNoLight": "Тень",
+  "filterValueHighLight": "Высокий",
+
+  "filterFiledMin": "Минимум: ",
+  "filterFieldMax": "Максимум: ",
+
+  "myPlantsLastWatered": "Последний полив: "
+}

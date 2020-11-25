@@ -85,3 +85,20 @@ abstract class FilterAttributeKeys {
   static const FILTER_BLOOM_MONTHS = "bloom_months";
 // TODO: add precipitation_mm
 }
+
+abstract class FilterAttributeValues {
+  static const MONTHS = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec"
+  ];
+}
