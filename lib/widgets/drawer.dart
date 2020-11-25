@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plants_scheduler/generated/l10n.dart';
 import 'package:plants_scheduler/pages/common/models/menu.dart';
 import 'package:plants_scheduler/pages/common/models/user.dart';
 
@@ -102,7 +103,7 @@ class PlantsDrawer extends StatelessWidget {
               return _menuTile(
                 context,
                 menu.items[index - 1],
-                isSelected: menu.items[index - 1].title == menu.selected,
+                isSelected: menu.items[index - 1].id == menu.selected,
                 onOpen: onOpen,
               );
             }
@@ -129,7 +130,7 @@ Widget _menuTile(
       color: color,
     ),
     title: Text(
-      menuItem.title,
+      S.of(context).menuTitles(menuItem.id),
       style: TextStyle(
         color: color,
       ),

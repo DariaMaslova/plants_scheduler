@@ -4,11 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:plants_scheduler/api/model/filter.dart';
 import 'package:plants_scheduler/core/pair.dart';
+import 'package:plants_scheduler/generated/l10n.dart';
 import 'package:plants_scheduler/main.dart';
 import 'package:plants_scheduler/pages/common/models/filter.dart';
-import 'package:plants_scheduler/resources/strings.dart';
 
 class FilterPage extends StatefulWidget {
   final FilterParams filterParams;
@@ -156,25 +157,25 @@ class _FilterState extends State<FilterPage> {
             onTap: _save,
           )
         ],
-        title: Text(FilterStrings.TITLE),
+        title: Text(S.of(context).filterTitle),
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         children: [
-          const _FilterTitle(
-            FilterStrings.FILTER_BLOOM_MONTHS,
+          _FilterTitle(
+            S.of(context).filterFilterBloomMonth,
             applyTopLeading: false,
           ),
           _MonthsTile(
             _getSelectedMonths(),
             onSelectedChanged: _onMonthSelectedChanged,
           ),
-          const _FilterTitle(FilterStrings.FILTER_LIGHT),
+          _FilterTitle(S.of(context).filterFilterLight),
           _LightLevelTile(
             _getLightLevel(),
             onRangeChanged: _onLightRangeChanged,
           ),
-          const _FilterTitle(FilterStrings.FILTER_MAX_HEIGHT),
+          _FilterTitle(S.of(context).filterFilterMaxHeight),
           _HeightTile(
             values: _getHeight(),
             leftController: _heightMinController,
@@ -235,8 +236,8 @@ class _EdibleTile extends StatelessWidget {
         child: Row(
           children: [
             Checkbox(value: isEdible, onChanged: onCheckedChanged),
-            const _FilterTitle(
-              FilterStrings.FILTER_EDIBLE,
+            _FilterTitle(
+              S.of(context).filterFilterEdible,
               applyStartLeading: false,
               applyTopLeading: false,
             ),
@@ -249,15 +250,18 @@ class _EdibleTile extends StatelessWidget {
 }
 
 class _MonthsTile extends StatelessWidget {
+  static final _formatMonth = DateFormat("MMMM");
   final Set<String> selectedMonths;
   final Function(String month, bool isSelected) onSelectedChanged;
 
   const _MonthsTile(this.selectedMonths, {Key key, this.onSelectedChanged})
       : super(key: key);
 
-  String _toShortName(String month) {
-    return month.substring(0, 3).toLowerCase();
+  String _toShortName(int month) {
+    return FilterAttributeValues.MONTHS[month];
   }
+
+  List<int> get _months => List<int>.generate(10, (i) => i + 1);
 
   @override
   Widget build(BuildContext context) {
@@ -265,11 +269,11 @@ class _MonthsTile extends StatelessWidget {
       padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
       child: Wrap(
         spacing: 8.0,
-        children: FilterStrings.MONTHS.map((month) {
+        children: _months.map((month) {
           final isSelected = selectedMonths.contains(_toShortName(month));
           return FilterChip(
             label: Text(
-              month,
+              _formatMonth.format(DateTime(197, month)),
               style: TextStyle(color: isSelected ? Colors.white : Colors.black),
             ),
             onSelected: (isSelected) =>
@@ -297,7 +301,7 @@ class _LightLevelTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
-          Text(FilterStrings.VALUE_NO_LIGHT),
+          Text(S.of(context).filterValueNoLight),
           Expanded(
             child: RangeSlider(
               values: RangeValues(
@@ -309,7 +313,7 @@ class _LightLevelTile extends StatelessWidget {
                   newValues.start.toInt(), newValues.end.toInt()),
             ),
           ),
-          Text(FilterStrings.VALUE_HIGH),
+          Text(S.of(context).filterValueHighLight),
         ],
       ),
     );
@@ -335,7 +339,7 @@ class _HeightTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(FilterStrings.FIELD_MIN),
+          Text(S.of(context).filterFiledMin),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -346,7 +350,7 @@ class _HeightTile extends StatelessWidget {
               ),
             ),
           ),
-          Text(FilterStrings.FIELD_MAX),
+          Text(S.of(context).filterFieldMax),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),

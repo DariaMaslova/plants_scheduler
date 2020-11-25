@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:plants_scheduler/pages/filter/filter_page.dart';
 import 'package:plants_scheduler/pages/home/home_page.dart';
 import 'package:plants_scheduler/pages/stub/stub_page.dart';
-import 'package:plants_scheduler/resources/strings.dart';
 import 'package:plants_scheduler/routes.dart';
+import 'package:plants_scheduler/generated/l10n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(App());
@@ -57,6 +58,13 @@ class AppState extends State<App> {
         ),
         onGenerateRoute: _generateRoute,
         initialRoute: AppRoutes.home,
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
       ),
     );
   }
@@ -79,7 +87,7 @@ Route<dynamic> _generateRoute(RouteSettings settings) {
     default:
       String title = settings.arguments is String
           ? settings.arguments
-          : StubStrings.UNKNOWN_PAGE;
+          : null;
       route = PageRouteBuilder(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>

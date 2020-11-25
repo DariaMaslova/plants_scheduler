@@ -1,0 +1,27 @@
+{
+  "@@locale": "en_US",
+
+  "trefleLocale": "en",
+
+  "menuTitles": "{title, select, myPlants {My Plants} catalogue {Catalogue} schedule {Schedule} logout {Logout} other {Undefined}}",
+
+  "homeHintSearch": "Search here...",
+
+  "stubUnknownPage": "Unknown Page",
+  "stubStubText": "Unfortunately, this feature is not implemented yet",
+
+  "filterTitle": "Filter",
+
+  "filterFilterEdible": "Is Edible",
+  "filterFilterMaxHeight": "Height in cm",
+  "filterFilterLight": "Light Level",
+  "filterFilterBloomMonth": "Bloom Months",
+
+  "filterValueNoLight": "No light",
+  "filterValueHighLight": "High",
+
+  "filterFiledMin": "Min: ",
+  "filterFieldMax": "Max: ",
+
+  "myPlantsLastWatered": "lastWatered: "
+}

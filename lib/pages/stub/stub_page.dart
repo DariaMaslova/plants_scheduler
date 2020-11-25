@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plants_scheduler/generated/l10n.dart';
 import 'package:plants_scheduler/main.dart';
-import 'package:plants_scheduler/resources/strings.dart';
 
 class StubPage extends StatelessWidget {
 
@@ -21,14 +21,14 @@ class StubPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        title: Text(title),
+        title: Text(title ?? S.of(context).stubUnknownPage),
       ) : null,
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              StubStrings.STUB_TEXT,
+              S.of(context).stubStubText,
               textAlign: TextAlign.center,
             ),
           ]),
